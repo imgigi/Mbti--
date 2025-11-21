@@ -114,11 +114,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
                     text="副人格类型 / 潜意识" 
                  />
                  <PreviewItem 
-                    icon={<BarChart2 className="w-3.5 h-3.5 text-blue-600" />} 
-                    bg="bg-blue-50"
-                    text="四维度百分比图表" 
-                 />
-                 <PreviewItem 
                     icon={<Lightbulb className="w-3.5 h-3.5 text-amber-600" />} 
                     bg="bg-amber-50"
                     text="社交特质、思考模式" 
