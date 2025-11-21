@@ -4,7 +4,7 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 import { PROFILES } from '../constants';
 import { MBTIProfile, ResultData } from '../types';
 import { generatePersonalityTip } from '../services/geminiService';
-import { Loader2, RefreshCw, User, Zap, Map, Heart, Briefcase, Sprout, Sparkles, ExternalLink, Download, Target, Moon, BarChart2 } from 'lucide-react';
+import { Loader2, RefreshCw, User, Zap, Map, Heart, Briefcase, Sprout, Sparkles, ExternalLink, Download, Target, Moon } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
 interface ResultPageProps {
@@ -84,26 +84,6 @@ export const ResultPage: React.FC<ResultPageProps> = ({ resultData, onRetake }) 
     { subject: '宏观抽象', A: profile.radarStats.abstract, fullMark: 100 },
   ];
 
-  const ProgressRow = ({ leftLabel, rightLabel, leftVal, rightVal, colorClass }: any) => (
-    <div className="flex items-center gap-3 text-xs font-bold text-slate-600">
-      <div className="w-6 flex justify-center">
-        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${leftVal >= rightVal ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-400'}`}>
-          {leftLabel}
-        </span>
-      </div>
-      <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden flex relative">
-        <div className={`h-full ${colorClass} transition-all duration-1000`} style={{ width: `${leftVal}%` }}></div>
-        <div className="h-full bg-slate-200 transition-all duration-1000" style={{ width: `${rightVal}%` }}></div>
-        <div className="absolute top-0 left-1/2 w-0.5 h-full bg-white/50 -translate-x-1/2"></div>
-      </div>
-      <div className="w-6 flex justify-center">
-        <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${rightVal > leftVal ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-400'}`}>
-          {rightLabel}
-        </span>
-      </div>
-    </div>
-  );
-
   return (
     <div ref={resultRef} className="flex flex-col bg-white relative min-h-screen">
       
@@ -133,7 +113,7 @@ export const ResultPage: React.FC<ResultPageProps> = ({ resultData, onRetake }) 
            </div>
 
            <div className="w-full bg-slate-50 rounded-2xl p-5 border border-slate-100 text-left shadow-inner">
-              <div className="flex items-center justify-between mb-5 pb-4 border-b border-slate-200/60 border-dashed">
+              <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-purple-600">
                       <Moon className="w-5 h-5" />
@@ -150,16 +130,6 @@ export const ResultPage: React.FC<ResultPageProps> = ({ resultData, onRetake }) 
                        Secondary
                      </div>
                   </div>
-              </div>
-              <div className="space-y-3">
-                 <div className="flex items-center gap-2 mb-1">
-                    <BarChart2 className="w-3 h-3 text-slate-400" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">维度分析</span>
-                 </div>
-                 <ProgressRow leftLabel="I" rightLabel="E" leftVal={resultData.percentages.I} rightVal={resultData.percentages.E} colorClass="bg-indigo-500" />
-                 <ProgressRow leftLabel="N" rightLabel="S" leftVal={resultData.percentages.N} rightVal={resultData.percentages.S} colorClass="bg-purple-500" />
-                 <ProgressRow leftLabel="F" rightLabel="T" leftVal={resultData.percentages.F} rightVal={resultData.percentages.T} colorClass="bg-pink-500" />
-                 <ProgressRow leftLabel="J" rightLabel="P" leftVal={resultData.percentages.J} rightVal={resultData.percentages.P} colorClass="bg-rose-500" />
               </div>
            </div>
         </div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowRight, Timer, FileText, Target, Moon, BarChart2, Lightbulb, Heart } from 'lucide-react';
+import { ArrowRight, Timer, FileText, Target, Moon, BarChart2, Lightbulb, Heart, Zap, MessageCircle, RefreshCw } from 'lucide-react';
 
 interface LandingPageProps {
   onStart: () => void;
@@ -25,20 +25,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">快速人格测评</span>
           </h1>
           <p className="text-slate-500 font-medium text-sm mb-5">
-            找到真正的你，从这里开始。
+            ✨我到底是什么样的人✨
           </p>
-          
-          {/* Tags */}
-          <div className="flex flex-wrap justify-center gap-2 text-[10px] font-bold text-slate-600">
-            <span className="bg-purple-50 border border-purple-100 px-2.5 py-1 rounded-md text-purple-700">16种人格 × 四维度深度分析</span>
-            <span className="bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-md text-indigo-700">轻负担 · 超精准</span>
-          </div>
         </div>
 
         {/* ② Intro Section */}
         <div className="mb-8 text-center">
-          <p className="text-xs text-slate-400 mb-2 font-medium uppercase tracking-wide">Everyone is asking</p>
-          <h3 className="text-lg font-bold text-slate-800 mb-4">✨ “我到底是什么样的人？”</h3>
           <p className="text-xs leading-relaxed text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100 text-left">
             本测评基于 <span className="font-bold text-slate-700">MBTI 四大维度理论</span>，结合实际行为场景设定，让你用最自然的选择，在 <span className="font-bold text-slate-700">8题以内</span> 就能找到与你最接近的人格原型。
           </p>
@@ -64,6 +56,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
               <div className="text-sm font-bold text-slate-800">30 秒</div>
             </div>
           </div>
+        </div>
+
+        {/* Selling Points */}
+        <div className="grid grid-cols-1 gap-3 mb-8">
+           <div className="bg-white border border-slate-100 shadow-sm rounded-xl p-4 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Zap className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 text-sm mb-1">速通版简单直接</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">30 秒就能测完，不用答一大堆题。</p>
+              </div>
+           </div>
+           
+           <div className="bg-white border border-slate-100 shadow-sm rounded-xl p-4 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 text-sm mb-1">真实情境好选择</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">题目都是日常场景，不会卡住。</p>
+              </div>
+           </div>
+
+           <div className="bg-white border border-slate-100 shadow-sm rounded-xl p-4 flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <RefreshCw className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-800 text-sm mb-1">可反复测试</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">随时重测、随时刷新。</p>
+              </div>
+           </div>
         </div>
 
         {/* ③ Preview Section (Updated to White Theme) */}
