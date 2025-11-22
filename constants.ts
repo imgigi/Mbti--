@@ -1,8 +1,102 @@
 
-import { QuestionNode, MBTIProfile } from './types';
+import { QuestionNode, MBTIProfile, Language } from './types';
 
-// Decision Tree Logic with Scoring
-export const QUESTION_TREE: Record<string, QuestionNode> = {
+// --- UI TEXT TRANSLATIONS ---
+export const UI_TEXT = {
+  zh: {
+    heroTag: "MBTI SPEED RUN",
+    heroTitle: "30秒 MBTI",
+    heroSubtitle: "快速人格测评",
+    heroQuestion: "✨我到底是什么样的人✨",
+    intro: "本测评基于 <span class='font-bold text-slate-700'>MBTI 四大维度理论</span>，结合实际行为场景设定，让你用最自然的选择，在 <span class='font-bold text-slate-700'>8题以内</span> 就能找到与你最接近的人格原型。",
+    statsQuestion: "题目数量",
+    statsTime: "预计时长",
+    statsQValue: "8 题",
+    statsTValue: "30 秒",
+    sellPoint1Title: "速通版简单直接",
+    sellPoint1Desc: "30 秒就能测完，不用答一大堆题。",
+    sellPoint2Title: "真实情境好选择",
+    sellPoint2Desc: "题目都是日常场景，不会卡住。",
+    sellPoint3Title: "可反复测试",
+    sellPoint3Desc: "随时重测、随时刷新。",
+    previewTitle: "测评结果包含：",
+    preview1: "主人格类型",
+    preview2: "副人格类型 / 潜意识",
+    preview3: "社交特质、思考模式",
+    preview4: "职业建议 & 情感风格",
+    startBtn: "开始测试",
+    disclaimer: "本测试参考 MBTI 理论与行为心理学模型，仅供自我认知参考，不构成专业心理诊断。",
+    quizProgress: "题目",
+    quizTitle: "MBTI 速通版",
+    resultSecondary: "潜意识 / 副人格",
+    resultArchetype: "人格原型",
+    resultFictional: "虚构代表",
+    resultReal: "现实代表",
+    resultMindMap: "心灵地图",
+    resultAbility: "能力分析",
+    resultSuperpower: "天赋优势",
+    resultBlindspot: "潜在盲点",
+    resultGalaxy: "关系星系",
+    resultMatch: "最佳拍档",
+    resultClash: "相爱相杀",
+    resultCareer: "天命职业",
+    resultGrowth: "成长指南",
+    resultAiCookie: "AI 能量饼干",
+    resultAiLoading: "正在读取宇宙信号...",
+    btnRetake: "再测一次",
+    btnSave: "保存长图",
+    btnSaving: "生成中...",
+    mainPersonality: "主人格"
+  },
+  en: {
+    heroTag: "MBTI SPEED RUN",
+    heroTitle: "30s MBTI",
+    heroSubtitle: "Personality Speed Run",
+    heroQuestion: "✨Who am I really?✨",
+    intro: "Based on <span class='font-bold text-slate-700'>MBTI Theory</span> and behavioral scenarios, this test helps you find your personality archetype in <span class='font-bold text-slate-700'>under 8 questions</span>.",
+    statsQuestion: "Questions",
+    statsTime: "Time",
+    statsQValue: "8 Qs",
+    statsTValue: "30 Sec",
+    sellPoint1Title: "Fast & Direct",
+    sellPoint1Desc: "Get results in 30 seconds. No long questionnaires.",
+    sellPoint2Title: "Real Scenarios",
+    sellPoint2Desc: "Easy-to-answer daily life situations.",
+    sellPoint3Title: "Retake Anytime",
+    sellPoint3Desc: "Refresh and retake as you grow.",
+    previewTitle: "Result Includes:",
+    preview1: "Main Personality Type",
+    preview2: "Sub-Personality / Subconscious",
+    preview3: "Social & Thinking Patterns",
+    preview4: "Career & Relationship Advice",
+    startBtn: "Start Quiz",
+    disclaimer: "Based on MBTI theory and behavioral psychology. For self-discovery purposes only.",
+    quizProgress: "Question",
+    quizTitle: "MBTI Speed Run",
+    resultSecondary: "Subconscious / Secondary",
+    resultArchetype: "Archetypes",
+    resultFictional: "Fictional",
+    resultReal: "Real World",
+    resultMindMap: "Mind Map",
+    resultAbility: "Analysis",
+    resultSuperpower: "Superpowers",
+    resultBlindspot: "Blind Spots",
+    resultGalaxy: "Relationships",
+    resultMatch: "Best Match",
+    resultClash: "Challenge",
+    resultCareer: "Career Path",
+    resultGrowth: "Growth Guide",
+    resultAiCookie: "AI Fortune Cookie",
+    resultAiLoading: "Receiving cosmic signals...",
+    btnRetake: "Retake",
+    btnSave: "Save Result",
+    btnSaving: "Saving...",
+    mainPersonality: "Main Type"
+  }
+};
+
+// --- DECISION TREE (CHINESE) ---
+const QUESTION_TREE_ZH: Record<string, QuestionNode> = {
   'Q1': {
     id: 'Q1',
     text: '陌生社交场合，你通常？',
@@ -123,8 +217,130 @@ export const QUESTION_TREE: Record<string, QuestionNode> = {
   }
 };
 
-// Personality Data
-export const PROFILES: Record<string, MBTIProfile> = {
+// --- DECISION TREE (ENGLISH) ---
+const QUESTION_TREE_EN: Record<string, QuestionNode> = {
+  'Q1': {
+    id: 'Q1',
+    text: 'At a social event with strangers, you usually:',
+    options: [
+      { label: 'A. Feel nervous, hope no one notices me', nextId: 'Q2', scores: { I: 2 } },
+      { label: 'B. Stick to friends, only respond if spoken to', nextId: 'Q2', scores: { I: 1 } },
+      { label: 'C. Can handle it if approached, but don\'t initiate', nextId: 'Q6_E', scores: { E: 1 } },
+      { label: 'D. Actively mingle and blend in quickly', nextId: 'Q6_E', scores: { E: 2 } }
+    ]
+  },
+  'Q2': {
+    id: 'Q2',
+    text: 'How do you feel about socializing?',
+    options: [
+      { label: 'A. Anxious before, need recharge after', nextId: 'Q3', scores: { I: 2 } },
+      { label: 'B. Not anxious, just dislike meaningless chat', nextId: 'Q3', scores: { I: 1 } },
+      { label: 'C. Depends on the activity', nextId: 'Q3', scores: { I: 0.5 } },
+      { label: 'D. Not sure', nextId: 'Q3', scores: {} }
+    ]
+  },
+  'Q3': {
+    id: 'Q3',
+    text: 'Do you feel you are "a bit weird/different"?',
+    options: [
+      { label: 'A. Yes', nextId: 'Q4', scores: { N: 2 } },
+      { label: 'B. No', nextId: 'Q4', scores: { S: 2 } },
+      { label: 'C. Not sure', nextId: 'Q4', scores: {} }
+    ]
+  },
+  'Q4': {
+    id: 'Q4',
+    text: 'Do others find you hard to get along with?',
+    options: [
+      { label: 'A. Yes, I have high standards / am distant', nextId: 'Q5', scores: { T: 1, J: 1 } },
+      { label: 'B. No, I am easygoing', nextId: 'Q5', scores: { F: 2 } },
+      { label: 'C. Depends', nextId: 'Q5', scores: {} },
+      { label: 'D. Not sure', nextId: 'Q5', scores: {} }
+    ]
+  },
+  'Q5': {
+    id: 'Q5',
+    text: 'When a friend is upset, you usually:',
+    options: [
+      { label: 'A. Analyze the cause and offer solutions', nextId: 'Q6_I', scores: { T: 2 } },
+      { label: 'B. Offer comfort and support', nextId: 'Q6_I', scores: { F: 2 } },
+      { label: 'C. Listen but don\'t know how to help', nextId: 'Q6_I', scores: { F: 0.5, T: 0.5 } },
+      { label: 'D. Not sure', nextId: 'Q6_I', scores: {} }
+    ]
+  },
+  'Q6_I': {
+    id: 'Q6_I',
+    text: 'What do you focus on more?',
+    options: [
+      { label: 'A. Future possibilities', nextId: 'Q7_I', scores: { N: 1 } },
+      { label: 'B. Current facts and details', nextId: 'Q7_I', scores: { S: 1 } },
+      { label: 'C. Switch between both', nextId: 'Q7_I', scores: {} },
+      { label: 'D. Not sure', nextId: 'Q7_I', scores: {} }
+    ]
+  },
+  'Q7_I': {
+    id: 'Q7_I',
+    text: 'When plans change suddenly, you:',
+    options: [
+      { label: 'A. Feel uneasy, need to re-plan', scores: { J: 2 } }, 
+      { label: 'B. Go with the flow, not anxious', scores: { P: 2 } }, 
+      { label: 'C. Uncomfortable but can adjust', scores: { J: 0.5, P: 0.5 } }, 
+      { label: 'D. Not sure', scores: {} } 
+    ]
+  },
+  'Q6_E': {
+    id: 'Q6_E',
+    text: 'How fast do you warm up to strangers?',
+    options: [
+      { label: 'A. I initiate topics', nextId: 'Q7_E', scores: { E: 2 } },
+      { label: 'B. I respond well if they talk', nextId: 'Q7_E', scores: { E: 1 } },
+      { label: 'C. Depends on mood', nextId: 'Q7_E', scores: { E: 0.5 } },
+      { label: 'D. Not sure', nextId: 'Q7_E', scores: {} }
+    ]
+  },
+  'Q7_E': {
+    id: 'Q7_E',
+    text: 'Do you feel you are "a bit weird/different"?',
+    options: [
+      { label: 'A. Yes', nextId: 'Q8', scores: { N: 2 } },
+      { label: 'B. No', nextId: 'Q8', scores: { S: 2 } },
+      { label: 'C. Not sure', nextId: 'Q8', scores: {} }
+    ]
+  },
+  'Q8': {
+    id: 'Q8',
+    text: 'Your attitude towards rules?',
+    options: [
+      { label: 'A. Break them if unreasonable', nextId: 'Q9', scores: { P: 2, N: 1 } },
+      { label: 'B. Usually follow them', nextId: 'Q9', scores: { J: 2 } },
+      { label: 'C. Follow if reasonable, bend if not', nextId: 'Q9', scores: { J: 0.5, P: 0.5 } },
+      { label: 'D. Follow but complain internally', nextId: 'Q9', scores: { J: 1, N: 0.5 } }
+    ]
+  },
+  'Q9': {
+    id: 'Q9',
+    text: 'Do you focus more on the future or present?',
+    options: [
+      { label: 'A. Often plan for future', nextId: 'Q10', scores: { N: 1, J: 1 } },
+      { label: 'B. Live in the moment', nextId: 'Q10', scores: { S: 1, P: 1 } },
+      { label: 'C. Switch based on situation', nextId: 'Q10', scores: {} },
+      { label: 'D. Not sure', nextId: 'Q10', scores: {} }
+    ]
+  },
+  'Q10': {
+    id: 'Q10',
+    text: 'When a friend is upset, you usually:',
+    options: [
+      { label: 'A. Analyze the cause', scores: { T: 2 } }, 
+      { label: 'B. Offer comfort', scores: { F: 2 } }, 
+      { label: 'C. Listen but unsure how to help', scores: { F: 0.5, T: 0.5 } }, 
+      { label: 'D. Not sure', scores: {} } 
+    ]
+  }
+};
+
+// --- PROFILES (CHINESE) ---
+const PROFILES_DATA_ZH: Record<string, MBTIProfile> = {
   'INTJ': {
     code: 'INTJ',
     name: '建筑师',
@@ -584,7 +800,7 @@ export const PROFILES: Record<string, MBTIProfile> = {
     radarStats: { logic: 30, control: 20, social: 95, abstract: 40 },
     drivers: ['乐趣', '刺激', '联系'],
     superpowers: [
-      { title: '超级感染力，能瞬间点亮场合', desc: 'ESFP 是活力与魅力的集合，他们的出现能让任何场合变得热闹、轻松且快乐。他们让人感觉“活着真好”。' },
+      { title: '超级感染力，能瞬间点亮场合', desc: 'ESFP 是活力与魅力的集合，他们的出现能让任何场合变得热闹、轻松且快乐。他们让人感到“活着真好”。' },
       { title: '卓越的社交感知力，让人感到被关注', desc: '他们能敏锐捕捉他人的情绪，用适当的方式让对方感到被理解与支持，这是一种非常强大的社交天赋。' },
       { title: '强烈的体验驱动力，能把生活过得多彩', desc: 'ESFP 不会被常规框住，他们擅长发现生活的美好，把平凡的事做得有趣、鲜活、充满生命力。' }
     ],
@@ -606,3 +822,501 @@ export const PROFILES: Record<string, MBTIProfile> = {
     ]
   }
 };
+
+// --- PROFILES (ENGLISH) ---
+// Full translation of all 16 personality types
+const PROFILES_DATA_EN: Record<string, MBTIProfile> = {
+  'INTJ': {
+    code: 'INTJ',
+    name: 'Architect',
+    slogan: 'Strategic Mastermind, Rationality Above All',
+    keywords: ['Rational', 'Visionary', 'Independent', 'Logic', 'Efficient'],
+    archetype: { fictional: 'Dr. Strange', historical: 'Elon Musk' },
+    radarStats: { logic: 95, control: 90, social: 40, abstract: 90 },
+    drivers: ['Efficiency', 'Knowledge', 'Vision'],
+    superpowers: [
+      { title: 'Strategic Insight', desc: 'INTJs naturally process information structurally, inferring future trends from hidden logic. They see "what happens next" rather than just "what is happening now".' },
+      { title: 'High Efficiency Execution', desc: 'They dislike supervision and interference. Once a goal is set, they disassemble the path and execute with maximum efficiency, driven internally.' },
+      { title: 'Rapid Learning of Principles', desc: 'INTJs grasp the underlying structure of knowledge quickly, allowing them to master new fields and build their own cognitive systems fast.' }
+    ],
+    blindspots: [
+      { title: 'Difficulty Expressing Emotion', desc: 'Often misunderstood as cold because they discuss problems directly rather than offering comfort. They express care by solving problems.' },
+      { title: 'High Standards for Others', desc: 'Strict with themselves and others. Can become impatient or frustrated when others don\'t meet their standards of efficiency.' },
+      { title: 'Analysis Paralysis', desc: 'Perfectionism can lead to overthinking before acting. They may internalize stress rather than seeking help.' }
+    ],
+    relationships: { strong: ['INTP', 'ENTJ'], weak: ['ESFJ', 'ISFJ'] },
+    careers: [
+      { title: 'Strategy & Analysis', desc: 'Business Analyst, Strategy Consultant, Quant. Perfect for dismantling complex systems.' },
+      { title: 'Deep Knowledge Fields', desc: 'Scientist, AI Engineer, System Architect. Allows for deep, independent work.' },
+      { title: 'Executive Roles', desc: 'CEO, COO, CSO. Requires macro perspective and long-term strategic vision.' }
+    ],
+    growth: [
+      { title: 'Express State of Mind', desc: 'Say "I need quiet time to think" instead of just being silent to avoid misunderstanding.' },
+      { title: 'Lower Expectations', desc: 'Set an "80% is good enough" limit for some tasks to reduce burden and delegate better.' },
+      { title: 'Schedule "Non-Productive" Time', desc: 'Rest is crucial for your insight. Schedule walks or relaxation to prevent logic overload.' }
+    ]
+  },
+  'INTP': {
+    code: 'INTP',
+    name: 'Logician',
+    slogan: 'The Thinker, Architect of Ideas',
+    keywords: ['Logic', 'Curious', 'Independent', 'Analytical', 'Innovative'],
+    archetype: { fictional: 'Sheldon Cooper', historical: 'Albert Einstein' },
+    radarStats: { logic: 95, control: 30, social: 20, abstract: 95 },
+    drivers: ['Knowledge', 'Truth', 'Understanding'],
+    superpowers: [
+      { title: 'Logical Deduction', desc: 'Non-linear thinking that finds the root cause quickly. They build complete logical models while others are stuck on surface issues.' },
+      { title: 'Intellectual Innovation', desc: 'Their mind is a lab. They constantly experiment with ideas, creating "systemic innovations" rather than just artistic ones.' },
+      { title: 'Independent Thinker', desc: 'Unaffected by mainstream opinion or authority. Their ideas often differ from and lead the environment.' }
+    ],
+    blindspots: [
+      { title: 'Analysis Paralysis', desc: 'Love thinking, hate executing. They analyze all possibilities but delay taking the first step.' },
+      { title: 'Weak Social Filter', desc: 'They speak "facts" which can seem cold or blunt to others. Often ignore emotional nuances.' },
+      { title: 'Insensitive to Details', desc: 'Admin and routine tasks are boring, leading to a messy life or missed deadlines.' }
+    ],
+    relationships: { strong: ['ENTJ', 'ENFP'], weak: ['ESFJ', 'ISFJ'] },
+    careers: [
+      { title: 'Research & Science', desc: 'Physicist, Researcher. Probing how the world works.' },
+      { title: 'Technical Innovation', desc: 'Software Architect, Algorithm Engineer. Building logical systems.' },
+      { title: 'Theoretical Strategy', desc: 'Philosopher, Strategist. Proposing novel viewpoints.' }
+    ],
+    growth: [
+      { title: 'Set Deadlines', desc: 'Force ideas into reality with time limits. Action reinforces logic.' },
+      { title: 'Use Buffer Language', desc: 'Start with "I think..." to soften corrections and reduce social friction.' },
+      { title: 'Minimal Life Structure', desc: 'Automate bills and routines to reduce chaos without over-planning.' }
+    ]
+  },
+  'ENTJ': {
+    code: 'ENTJ',
+    name: 'Commander',
+    slogan: 'Born Leader, Efficiency First',
+    keywords: ['Confident', 'Decisive', 'Leadership', 'Efficient', 'Ambitious'],
+    archetype: { fictional: 'Mavis', historical: 'Steve Jobs' },
+    radarStats: { logic: 90, control: 95, social: 80, abstract: 85 },
+    drivers: ['Achievement', 'Power', 'Efficiency'],
+    superpowers: [
+      { title: 'Natural Leadership', desc: 'Instinctively takes charge in chaotic situations. Evaluates situations quickly and gives actionable plans.' },
+      { title: 'Goal-Driven Efficiency', desc: 'Obsessed with achieving goals. Fast-acting with high standards, they act as the team\'s accelerator.' },
+      { title: 'Calm Under Pressure', desc: 'Rational and objective even in crises. Excellent at weighing pros and cons quickly.' }
+    ],
+    blindspots: [
+      { title: 'Intimidating Communication', desc: 'Direct and fast, often sounding like orders. Can be misunderstood as impatient or aggressive.' },
+      { title: 'Low Tolerance for Inefficiency', desc: 'Loses patience quickly with incompetence, sometimes taking over work and creating dependency.' },
+      { title: 'Neglects Emotion', desc: 'Focuses on solving problems but ignores the need for emotional understanding, hurting intimate relationships.' }
+    ],
+    relationships: { strong: ['INTJ', 'INTP'], weak: ['ISFP', 'ESFP'] },
+    careers: [
+      { title: 'Executive Management', desc: 'CEO, COO. Strategic planning and leading teams.' },
+      { title: 'Finance & Investment', desc: 'Investment Banking, Fund Management. Requires strong logic and decisiveness.' },
+      { title: 'Project Management', desc: 'Director of Operations. Coordinating resources and goals.' }
+    ],
+    growth: [
+      { title: 'Use Emotional Buffers', desc: 'Add "I\'m being direct, not personal" to reduce tension.' },
+      { title: 'Listen First', desc: 'Listen to emotions before offering solutions to strengthen relationships.' },
+      { title: 'Allow Mistakes', desc: 'Learning to let go and let others grow through errors is key.' }
+    ]
+  },
+  'ENTP': {
+    code: 'ENTP',
+    name: 'Debater',
+    slogan: 'The Challenger, Intellectual Explorer',
+    keywords: ['Witty', 'Innovative', 'Argumentative', 'Curious', 'Independent'],
+    archetype: { fictional: 'Tony Stark', historical: 'Socrates' },
+    radarStats: { logic: 85, control: 30, social: 85, abstract: 90 },
+    drivers: ['Challenge', 'Possibility', 'Freedom'],
+    superpowers: [
+      { title: 'Agile Thinking', desc: 'Fast processor. Understands new concepts instantly and offers unique perspectives.' },
+      { title: 'Innovation', desc: 'Loves disrupting and rebuilding. Sees possibilities where others see limits.' },
+      { title: 'High Adaptability', desc: 'Thrives in uncertainty and dynamic environments.' }
+    ],
+    blindspots: [
+      { title: 'Argues too Much', desc: 'Debates for fun but others feel attacked. Can hurt relationships.' },
+      { title: 'Poor Execution', desc: 'Great at generating ideas but gets bored easily, leaving things unfinished.' },
+      { title: 'Lack of Focus', desc: 'Hard to maintain attention on repetitive tasks.' }
+    ],
+    relationships: { strong: ['INTJ', 'INFJ'], weak: ['ISFJ', 'ESFJ'] },
+    careers: [
+      { title: 'Entrepreneurship', desc: 'Founder, Innovator. Combines ideas, speech, and risk-taking.' },
+      { title: 'Consulting & Strategy', desc: 'Brand Planner, Consultant. Finding new approaches.' },
+      { title: 'Creative Industries', desc: 'Screenwriter, Ad Creative. Building worlds and narratives.' }
+    ],
+    growth: [
+      { title: 'Execution Floor', desc: 'Commit to finishing at least 20% of your ideas.' },
+      { title: 'Clarify Intent', desc: 'Ask "Do you want listening or solutions?" before debating.' },
+      { title: 'Break Down Goals', desc: 'Split long-term goals into short bursts to maintain interest.' }
+    ]
+  },
+  'INFJ': {
+    code: 'INFJ',
+    name: 'Advocate',
+    slogan: 'The Mentor, Deep Idealist',
+    keywords: ['Profound', 'Idealistic', 'Empathetic', 'Intuitive', 'Principled'],
+    archetype: { fictional: 'Dumbledore', historical: 'Carl Jung' },
+    radarStats: { logic: 60, control: 75, social: 60, abstract: 95 },
+    drivers: ['Meaning', 'Growth', 'Harmony'],
+    superpowers: [
+      { title: 'Deep Insight', desc: 'Reads souls. Understands the needs behind emotions, not just surface feelings.' },
+      { title: 'Driven by Meaning', desc: 'Lives for value. Shows amazing perseverance for meaningful causes.' },
+      { title: 'Creative Organization', desc: 'Combines imagination with planning. Turns abstract ideas into reality.' }
+    ],
+    blindspots: [
+      { title: 'Perfectionist Stress', desc: 'Self-critical when reality doesn\'t match their ideal. prone to burnout.' },
+      { title: 'Hides Needs', desc: 'Prioritizes others until they snap and cut off relationships ("Door Slam").' },
+      { title: 'Conflict Avoidant', desc: 'Absorbs negative energy and withdraws instead of addressing conflict.' }
+    ],
+    relationships: { strong: ['ENFP', 'INFP'], weak: ['ESTP', 'ISTP'] },
+    careers: [
+      { title: 'Counseling & Therapy', desc: 'Therapist, Counselor. Rare empathy and listening skills.' },
+      { title: 'Education', desc: 'Teacher, Mentor. Inspiring potential in others.' },
+      { title: 'Writing & Content', desc: 'Writer, Editor. Touching hearts with words.' }
+    ],
+    growth: [
+      { title: 'Voice Your Needs', desc: 'Say "I need rest" simply. Don\'t wait for others to guess.' },
+      { title: 'Lower Standards', desc: 'Aim for "good enough" to reduce exhaustion.' },
+      { title: 'Be Real', desc: 'You don\'t always have to be gentle. Realness builds trust.' }
+    ]
+  },
+  'INFP': {
+    code: 'INFP',
+    name: 'Mediator',
+    slogan: 'The Poet, Eternal Idealist',
+    keywords: ['Sensitive', 'Empathetic', 'Idealistic', 'Creative', 'Kind'],
+    archetype: { fictional: 'Luna Lovegood', historical: 'Van Gogh' },
+    radarStats: { logic: 30, control: 40, social: 50, abstract: 90 },
+    drivers: ['Harmony', 'Authenticity', 'Meaning'],
+    superpowers: [
+      { title: 'Deep Empathy', desc: 'Feels others\' emotions vividly. Makes people feel truly seen and accepted.' },
+      { title: 'Soulful Creativity', desc: 'Creates art with spiritual depth. Unique imagination.' },
+      { title: 'Unwavering Values', desc: 'Loyal to inner principles regardless of external pressure.' }
+    ],
+    blindspots: [
+      { title: 'Overly Emotional', desc: 'Internal experiences are intense. Easily hurt by small comments.' },
+      { title: 'Indecisive', desc: 'Fear of making the wrong choice or hurting others leads to hesitation.' },
+      { title: 'Self-Doubt', desc: 'Takes feedback as personal rejection.' }
+    ],
+    relationships: { strong: ['ENFJ', 'INFJ'], weak: ['ESTJ', 'ISTJ'] },
+    careers: [
+      { title: 'Therapy & Coaching', desc: 'Counselor. Providing safe space for others.' },
+      { title: 'Arts & Writing', desc: 'Artist, Writer. Expressing emotion through work.' },
+      { title: 'Education', desc: 'Teacher. Nurturing children\'s dreams.' }
+    ],
+    growth: [
+      { title: 'Be Kinder to Yourself', desc: 'You aren\'t inadequate, your standards are just high.' },
+      { title: 'Set Boundaries', desc: 'You are not everyone\'s savior.' },
+      { title: 'Small Steps', desc: 'Do 10% of a task to get started towards your dream.' }
+    ]
+  },
+  'ENFJ': {
+    code: 'ENFJ',
+    name: 'Protagonist',
+    slogan: 'The Unifier, Inspiring Leader',
+    keywords: ['Charismatic', 'Empathetic', 'Leader', 'Passionate', 'Idealist'],
+    archetype: { fictional: 'Mulan', historical: 'Martin Luther King Jr.' },
+    radarStats: { logic: 40, control: 80, social: 95, abstract: 75 },
+    drivers: ['Harmony', 'Growth', 'Influence'],
+    superpowers: [
+      { title: 'Master Communicator', desc: 'Warm and inspiring. Makes complex ideas feel simple and motivating.' },
+      { title: 'Team Builder', desc: 'The glue of the team. Coordinates different personalities effectively.' },
+      { title: 'Emotional Insight', desc: 'Understands what is unspoken. Key for leadership and healing.' }
+    ],
+    blindspots: [
+      { title: 'Self-Neglect', desc: 'Puts others first until exhausted.' },
+      { title: 'People Pleasing', desc: 'Agrees to maintain harmony, losing their own voice.' },
+      { title: 'Over-Responsibility', desc: 'Feels responsible for everyone\'s problems.' }
+    ],
+    relationships: { strong: ['INFP', 'INFJ'], weak: ['ISTP', 'ESTP'] },
+    careers: [
+      { title: 'Education', desc: 'Teacher, Trainer. Guiding and inspiring growth.' },
+      { title: 'HR & Counseling', desc: 'HRBP, Counselor. Managing team atmosphere and emotions.' },
+      { title: 'Public Speaking', desc: 'Host, Speaker. Influencing through expression.' }
+    ],
+    growth: [
+      { title: 'Learn to Refuse', desc: 'Saying no is responsible, not mean.' },
+      { title: 'Me Time', desc: 'Reserve 30% of your time for yourself.' },
+      { title: 'Be Authentic', desc: 'You don\'t always have to be the nice one.' }
+    ]
+  },
+  'ENFP': {
+    code: 'ENFP',
+    name: 'Campaigner',
+    slogan: 'The Spark, Enthusiastic Explorer',
+    keywords: ['Enthusiastic', 'Creative', 'Optimistic', 'Curious', 'Social'],
+    archetype: { fictional: 'Genie', historical: 'Walt Disney' },
+    radarStats: { logic: 40, control: 20, social: 90, abstract: 80 },
+    drivers: ['Possibility', 'Inspiration', 'Freedom'],
+    superpowers: [
+      { title: 'Creative Engine', desc: 'Sees possibilities everywhere. The team\'s idea generator.' },
+      { title: 'Infectious Energy', desc: 'Lights up the room and makes everyone want to participate.' },
+      { title: 'Open Minded', desc: 'Understands diverse viewpoints and connects dots.' }
+    ],
+    blindspots: [
+      { title: 'Starts but Doesn\'t Finish', desc: 'Loses interest once the novelty wears off.' },
+      { title: 'Overthinking', desc: 'Reads too much into simple words.' },
+      { title: 'Distracted', desc: 'Chasing new shiny things leads to chaos.' }
+    ],
+    relationships: { strong: ['INFJ', 'INTJ'], weak: ['ISTJ', 'ESTJ'] },
+    careers: [
+      { title: 'Creative Arts', desc: 'Advertising, Branding. Storytelling.' },
+      { title: 'Education', desc: 'Teacher, Coach. Making learning fun.' },
+      { title: 'Counseling', desc: 'Life Coach. Encouraging others.' }
+    ],
+    growth: [
+      { title: 'Minimum Viable Consistency', desc: 'Commit to 15 mins a day rather than big bursts.' },
+      { title: 'Manage Input', desc: 'Reduce noise to stabilize emotions.' },
+      { title: 'Cost Assessment', desc: 'Ask "What does this choice cost me?" before jumping in.' }
+    ]
+  },
+  'ISTJ': {
+    code: 'ISTJ',
+    name: 'Logistician',
+    slogan: 'The Rock, Reliable Realist',
+    keywords: ['Responsible', 'Pragmatic', 'Organized', 'Reliable', 'Traditional'],
+    archetype: { fictional: 'Hermione Granger', historical: 'George Washington' },
+    radarStats: { logic: 80, control: 90, social: 40, abstract: 30 },
+    drivers: ['Responsibility', 'Order', 'Security'],
+    superpowers: [
+      { title: 'Super Execution', desc: 'They do what they say. Reliable and punctual, the backbone of any team.' },
+      { title: 'Detail Oriented', desc: 'Catches errors others miss. Standardizes complex processes.' },
+      { title: 'Endurance', desc: 'Can sustain focus on repetitive tasks through sheer responsibility.' }
+    ],
+    blindspots: [
+      { title: 'Rigid', desc: 'Dislikes change. Can seem stubborn or stuck in their ways.' },
+      { title: 'Emotionally Reserved', desc: 'Shows care through acts of service, not words. Can seem cold.' },
+      { title: 'Stressed by Chaos', desc: 'Sudden changes cause internal anxiety.' }
+    ],
+    relationships: { strong: ['ESTJ', 'ISFJ'], weak: ['ENFP', 'INFP'] },
+    careers: [
+      { title: 'Finance & Audit', desc: 'Accountant, Auditor. Precision and stability.' },
+      { title: 'Administration', desc: 'Admin Manager. Optimizing workflows.' },
+      { title: 'Law & Gov', desc: 'Lawyer, Civil Servant. Rules and structure.' }
+    ],
+    growth: [
+      { title: 'Be Open', desc: 'Try saying "I\'ll try it" instead of "No".' },
+      { title: 'Express Feelings', desc: 'Say "I worry about you" rather than just fixing things.' },
+      { title: 'Relax', desc: 'Schedule unstructured rest time.' }
+    ]
+  },
+  'ISFJ': {
+    code: 'ISFJ',
+    name: 'Defender',
+    slogan: 'The Protector, Warm Guardian',
+    keywords: ['Responsible', 'Considerate', 'Traditional', 'Pragmatic', 'Kind'],
+    archetype: { fictional: 'Samwise Gamgee', historical: 'Mother Teresa' },
+    radarStats: { logic: 40, control: 80, social: 70, abstract: 20 },
+    drivers: ['Responsibility', 'Harmony', 'Service'],
+    superpowers: [
+      { title: 'Natural Caretaker', desc: 'Remembers details about people. Provides safety and warmth.' },
+      { title: 'Reliable', desc: 'Meticulous and steady. Handles long-term tasks well.' },
+      { title: 'Harmonizer', desc: 'Senses emotional atmosphere and keeps things peaceful.' }
+    ],
+    blindspots: [
+      { title: 'Over-Gives', desc: 'Hard time saying no. Can be exploited.' },
+      { title: 'Avoids Conflict', desc: 'Chooses silence over confrontation, leading to resentment.' },
+      { title: 'Fears Change', desc: 'Anxious about the unknown.' }
+    ],
+    relationships: { strong: ['ESFJ', 'ISTJ'], weak: ['ENTP', 'INTP'] },
+    careers: [
+      { title: 'Healthcare', desc: 'Nurse, Medical Assistant. Caring for others.' },
+      { title: 'Education', desc: 'Teacher. Patient guidance.' },
+      { title: 'Admin Support', desc: 'HR Assistant. Service and detail.' }
+    ],
+    growth: [
+      { title: 'Say No', desc: 'Boundaries protect you.' },
+      { title: 'Rest', desc: 'Don\'t be on call 24/7.' },
+      { title: 'Try New Things', desc: 'Small changes build adaptability.' }
+    ]
+  },
+  'ESTJ': {
+    code: 'ESTJ',
+    name: 'Executive',
+    slogan: 'The Supervisor, Order Maker',
+    keywords: ['Pragmatic', 'Responsible', 'Organized', 'Efficient', 'Traditional'],
+    archetype: { fictional: 'Minerva McGonagall', historical: 'Margaret Thatcher' },
+    radarStats: { logic: 85, control: 90, social: 80, abstract: 30 },
+    drivers: ['Order', 'Responsibility', 'Efficiency'],
+    superpowers: [
+      { title: 'Organizer', desc: 'Creates order from chaos. Assigns tasks and builds structure.' },
+      { title: 'Execution Machine', desc: 'High efficiency and high standards. The anchor of the team.' },
+      { title: 'Decisive', desc: 'Quick to evaluate and act. Moves the team forward.' }
+    ],
+    blindspots: [
+      { title: 'Too Dominant', desc: 'Can be overpowering and stressful for others.' },
+      { title: 'Closed Minded', desc: 'Dismisses abstract or unproven ideas.' },
+      { title: 'Blunt', desc: 'Ignores feelings in favor of facts.' }
+    ],
+    relationships: { strong: ['ISFJ', 'ESFJ'], weak: ['INFP', 'ENFP'] },
+    careers: [
+      { title: 'Management', desc: 'Operations Manager. Coordinating resources.' },
+      { title: 'Law & Gov', desc: 'Judge, Officer. Systems and rules.' },
+      { title: 'Finance', desc: 'Auditor. Precision and efficiency.' }
+    ],
+    growth: [
+      { title: 'Listen More', desc: 'Wait a minute before judging.' },
+      { title: 'Accept Differences', desc: 'Not everyone is as fast as you.' },
+      { title: 'Show Appreciation', desc: 'Say "Good job" to build trust.' }
+    ]
+  },
+  'ESFJ': {
+    code: 'ESFJ',
+    name: 'Consul',
+    slogan: 'The Provider, Social Glue',
+    keywords: ['Warm', 'Responsible', 'Friendly', 'Traditional', 'Pragmatic'],
+    archetype: { fictional: 'Monica Geller', historical: 'Princess Diana' },
+    radarStats: { logic: 30, control: 85, social: 95, abstract: 20 },
+    drivers: ['Harmony', 'Responsibility', 'Belonging'],
+    superpowers: [
+      { title: 'Social Connection', desc: 'Instantly reads emotions and connects. Makes people feel welcome.' },
+      { title: 'Reliable Support', desc: 'Maintains harmony and handles details for the team.' },
+      { title: 'Coordinator', desc: 'Great at managing people and events.' }
+    ],
+    blindspots: [
+      { title: 'Needs Approval', desc: 'Anxious if not validated by others.' },
+      { title: 'Rigid', desc: 'Dislikes sudden changes to plans.' },
+      { title: 'Self-Sacrificing', desc: 'Neglects own needs to keep peace.' }
+    ],
+    relationships: { strong: ['ISFJ', 'ESTJ'], weak: ['INTP', 'ENTP'] },
+    careers: [
+      { title: 'Social Service', desc: 'Teacher, Social Worker. Caring for people.' },
+      { title: 'Sales & Service', desc: 'Account Manager. Building relationships.' },
+      { title: 'Healthcare', desc: 'Nurse. Emotional support.' }
+    ],
+    growth: [
+      { title: 'Listen to Yourself', desc: 'What do YOU want?' },
+      { title: 'Accept Disagreement', desc: 'Conflict doesn\'t mean failure.' },
+      { title: 'Rest', desc: 'You don\'t have to fix everyone.' }
+    ]
+  },
+  'ISTP': {
+    code: 'ISTP',
+    name: 'Virtuoso',
+    slogan: 'The Crafter, Cool Observer',
+    keywords: ['Calm', 'Pragmatic', 'Independent', 'Flexible', 'Skilled'],
+    archetype: { fictional: 'James Bond', historical: 'Clint Eastwood' },
+    radarStats: { logic: 85, control: 30, social: 30, abstract: 40 },
+    drivers: ['Freedom', 'Efficiency', 'Utility'],
+    superpowers: [
+      { title: 'Problem Solver', desc: 'Practical genius. Fixes things instantly.' },
+      { title: 'Crisis Manager', desc: 'Calm under fire. Acts quickly when things break.' },
+      { title: 'Adaptable', desc: 'Learns new skills and tools rapidly.' }
+    ],
+    blindspots: [
+      { title: 'Emotionally Distant', desc: 'Hard to get close to. Avoids emotional talks.' },
+      { title: 'Short-Term Focus', desc: 'Dislikes long-term planning.' },
+      { title: 'Risky', desc: 'Prone to impulsive, thrill-seeking behavior.' }
+    ],
+    relationships: { strong: ['ESTP', 'ISFP'], weak: ['ENFJ', 'INFJ'] },
+    careers: [
+      { title: 'Engineering', desc: 'Engineer, Pilot. Hands-on logic.' },
+      { title: 'Emergency Response', desc: 'Firefighter, EMT. Crisis action.' },
+      { title: 'Field Ops', desc: 'Technician. Practical skills.' }
+    ],
+    growth: [
+      { title: 'Express Needs', desc: 'Say "I need space" clearly.' },
+      { title: 'Basic Plan', desc: 'Have a safety net for finances/career.' },
+      { title: 'Pause', desc: 'Think 10 seconds before acting.' }
+    ]
+  },
+  'ISFP': {
+    code: 'ISFP',
+    name: 'Adventurer',
+    slogan: 'The Artist, Gentle Soul',
+    keywords: ['Sensitive', 'Artistic', 'Gentle', 'Pragmatic', 'Flexible'],
+    archetype: { fictional: 'Harry Potter', historical: 'Michael Jackson' },
+    radarStats: { logic: 30, control: 20, social: 50, abstract: 60 },
+    drivers: ['Harmony', 'Aesthetics', 'Freedom'],
+    superpowers: [
+      { title: 'Aesthetic Sense', desc: 'Notices beauty in details. Natural artist.' },
+      { title: 'Calming Presence', desc: 'Gentle and accepting. Makes others feel safe.' },
+      { title: 'Adaptable', desc: 'Flows with the moment gracefully.' }
+    ],
+    blindspots: [
+      { title: 'Sensitive to Criticism', desc: 'Easily hurt by negative feedback.' },
+      { title: 'Conflict Avoidant', desc: 'Swallows feelings to keep peace.' },
+      { title: 'Lack of Direction', desc: 'Drifts without long-term goals.' }
+    ],
+    relationships: { strong: ['ESFP', 'ISTP'], weak: ['ENTJ', 'INTJ'] },
+    careers: [
+      { title: 'Arts & Design', desc: 'Designer, Photographer. Visual expression.' },
+      { title: 'Care', desc: 'Vet, Therapist. Gentle support.' },
+      { title: 'Lifestyle', desc: 'Florist, Instructor. Sharing beauty.' }
+    ],
+    growth: [
+      { title: 'Speak Up', desc: 'Expressing dislike increases respect.' },
+      { title: 'Mild Planning', desc: 'Set small monthly goals.' },
+      { title: 'Stop Self-Criticism', desc: 'You are enough.' }
+    ]
+  },
+  'ESTP': {
+    code: 'ESTP',
+    name: 'Entrepreneur',
+    slogan: 'The Dynamo, Risk Taker',
+    keywords: ['Energetic', 'Pragmatic', 'Flexible', 'Adventurous', 'Social'],
+    archetype: { fictional: 'Rocket Raccoon', historical: 'Donald Trump' },
+    radarStats: { logic: 80, control: 20, social: 90, abstract: 40 },
+    drivers: ['Excitement', 'Freedom', 'Results'],
+    superpowers: [
+      { title: 'Adaptability', desc: 'Thrives in chaos. Finds solutions instantly.' },
+      { title: 'Action Oriented', desc: 'Moves while others talk. The engine of the team.' },
+      { title: 'Charisma', desc: 'Natural charm and fun to be around.' }
+    ],
+    blindspots: [
+      { title: 'Impulsive', desc: 'Leaps before looking. Ignores consequences.' },
+      { title: 'Bored Easily', desc: 'Hates routine and long-term tasks.' },
+      { title: 'Insensitive', desc: 'Can be blunt and hurt sensitive people.' }
+    ],
+    relationships: { strong: ['ISTP', 'ESFP'], weak: ['INFJ', 'ENFJ'] },
+    careers: [
+      { title: 'Sales', desc: 'Sales Director. Closing deals.' },
+      { title: 'Entrepreneurship', desc: 'Founder. Taking risks.' },
+      { title: 'Sports', desc: 'Athlete, Coach. Physical action.' }
+    ],
+    growth: [
+      { title: 'Check Consequences', desc: 'Ask "What happens next?"' },
+      { title: 'Short Rewards', desc: 'Gamify your long-term tasks.' },
+      { title: 'Listen to Emotions', desc: 'Slow down for others.' }
+    ]
+  },
+  'ESFP': {
+    code: 'ESFP',
+    name: 'Entertainer',
+    slogan: 'The Star, Life of the Party',
+    keywords: ['Enthusiastic', 'Vibrant', 'Friendly', 'Pragmatic', 'Flexible'],
+    archetype: { fictional: 'Penny (Big Bang)', historical: 'Marilyn Monroe' },
+    radarStats: { logic: 30, control: 20, social: 95, abstract: 40 },
+    drivers: ['Fun', 'Excitement', 'Connection'],
+    superpowers: [
+      { title: 'Infectious Joy', desc: 'Lights up any room. Makes life feel alive.' },
+      { title: 'Social Awareness', desc: 'Reads the room perfectly. Connects with everyone.' },
+      { title: 'Experience Driven', desc: 'Finds joy in the ordinary. Lives fully.' }
+    ],
+    blindspots: [
+      { title: 'No Planning', desc: 'Gets lost without a roadmap.' },
+      { title: 'Emotional Volatility', desc: 'Driven by momentary feelings.' },
+      { title: 'Needs Attention', desc: 'Anxious without validation.' }
+    ],
+    relationships: { strong: ['ISFP', 'ESTP'], weak: ['INTJ', 'ENTJ'] },
+    careers: [
+      { title: 'Performance', desc: 'Actor, Host. Being seen.' },
+      { title: 'Tourism', desc: 'Guide. Sharing experiences.' },
+      { title: 'PR & Events', desc: 'Event Planner. Creating fun.' }
+    ],
+    growth: [
+      { title: 'Light Structure', desc: 'Pick a general direction.' },
+      { title: 'Filter Input', desc: 'Avoid drama.' },
+      { title: 'Validate Yourself', desc: 'You are worthy even when quiet.' }
+    ]
+  }
+};
+
+// --- EXPORTS ---
+
+export const getQuestions = (lang: Language) => {
+  return lang === 'zh' ? QUESTION_TREE_ZH : QUESTION_TREE_EN;
+};
+
+export const getProfile = (lang: Language, code: string) => {
+  return lang === 'zh' ? PROFILES_DATA_ZH[code] : PROFILES_DATA_EN[code];
+};
+
+// Maintain backward compatibility for imports if any
+export { PROFILES_DATA_ZH as PROFILES, QUESTION_TREE_ZH as QUESTION_TREE };

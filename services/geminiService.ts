@@ -1,7 +1,8 @@
-import { GoogleGenAI } from "@google/genai";
-import { MBTIProfile } from '../types';
 
-export const generatePersonalityTip = async (profile: MBTIProfile) => {
+import { GoogleGenAI } from "@google/genai";
+import { MBTIProfile, Language } from '../types';
+
+export const generatePersonalityTip = async (profile: MBTIProfile, language: Language) => {
   if (!process.env.API_KEY) {
     return null;
   }
@@ -15,6 +16,8 @@ export const generatePersonalityTip = async (profile: MBTIProfile) => {
     
     Please provide a one-sentence "Fortune Cookie" style piece of advice for them for today. 
     Make it insightful but short and punchy. 
+    
+    Important: Respond in ${language === 'zh' ? 'Chinese (Simplified)' : 'English'}.
     Don't use markdown. Just plain text.
   `;
 

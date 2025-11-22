@@ -1,10 +1,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { QUESTION_TREE } from '../constants';
-import { OptionNode, QuestionNode, ResultData } from '../types';
+import { getQuestions, UI_TEXT } from '../constants';
+import { OptionNode, QuestionNode, ResultData, Language } from '../types';
 
 interface QuizPageProps {
   onFinish: (data: ResultData) => void;
+  language: Language;
 }
 
 interface OptionButtonProps {
@@ -27,17 +28,18 @@ const OptionButton: React.FC<OptionButtonProps> = ({ option, onClick }) => {
   );
 };
 
-export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
+export const QuizPage: React.FC<QuizPageProps> = ({ onFinish, language }) => {
   const [currentQuestionId, setCurrentQuestionId] = useState<string>('Q1');
   const [history, setHistory] = useState<string[]>([]);
   const [animating, setAnimating] = useState(false);
-  // Initialize scores
   const [scores, setScores] = useState<Record<string, number>>({
     I: 0, E: 0, N: 0, S: 0, T: 0, F: 0, J: 0, P: 0
   });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const currentQuestion: QuestionNode = QUESTION_TREE[currentQuestionId];
+  const QUESTIONS = getQuestions(language);
+  const currentQuestion: QuestionNode = QUESTIONS[currentQuestionId];
+  const t = UI_TEXT[language];
 
   // Scroll to top whenever the question changes
   useEffect(() => {
@@ -45,7 +47,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
   }, [currentQuestionId]);
 
   const calculateResults = (finalScores: Record<string, number>): ResultData => {
-    // Helper to get percentage
     const getPct = (a: number, b: number) => {
       const total = a + b;
       return total === 0 ? 50 : Math.round((a / total) * 100);
@@ -62,14 +63,12 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
       P: getPct(finalScores.P, finalScores.J),
     };
 
-    // Determine Main Code
     const l1 = finalScores.E > finalScores.I ? 'E' : 'I';
     const l2 = finalScores.N > finalScores.S ? 'N' : 'S';
     const l3 = finalScores.T > finalScores.F ? 'T' : 'F';
     const l4 = finalScores.J > finalScores.P ? 'J' : 'P';
     const mainCode = `${l1}${l2}${l3}${l4}`;
 
-    // Determine Sub Code
     const margins = [
       { dim: 'I', margin: Math.abs(finalScores.I - finalScores.E), flip: l1 === 'E' ? 'I' : 'E', idx: 0 },
       { dim: 'N', margin: Math.abs(finalScores.N - finalScores.S), flip: l2 === 'N' ? 'S' : 'N', idx: 1 },
@@ -92,7 +91,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
   };
 
   const handleOptionClick = (option: OptionNode) => {
-    // Accumulate scores
     const newScores = { ...scores };
     if (option.scores) {
       Object.entries(option.scores).forEach(([key, value]) => {
@@ -102,7 +100,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
     setScores(newScores);
 
     if (option.nextId) {
-      // Continue Quiz
       setAnimating(true);
       setTimeout(() => {
         setHistory(prev => [...prev, currentQuestionId]);
@@ -110,7 +107,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
         setAnimating(false);
       }, 300);
     } else {
-      // Finish Quiz
       const resultData = calculateResults(newScores);
       onFinish(resultData);
     }
@@ -123,10 +119,10 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
       {/* Progress Header */}
       <div className="pt-8 pb-4 px-6 flex justify-between items-center">
         <div className="bg-white px-4 py-1.5 rounded-full text-xs font-bold text-slate-500 shadow-sm border border-slate-100">
-          Question {stepCount}
+          {t.quizProgress} {stepCount}
         </div>
         <div className="text-xs text-slate-400 font-medium">
-          MBTI 速通版
+          {t.quizTitle}
         </div>
       </div>
 

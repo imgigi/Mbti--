@@ -1,4 +1,6 @@
 
+export type Language = 'zh' | 'en';
+
 export interface QuestionNode {
   id: string;
   text: string;
