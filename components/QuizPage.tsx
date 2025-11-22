@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { QUESTION_TREE } from '../constants';
 import { OptionNode, QuestionNode, ResultData } from '../types';
 
@@ -31,14 +31,18 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
   const [currentQuestionId, setCurrentQuestionId] = useState<string>('Q1');
   const [history, setHistory] = useState<string[]>([]);
   const [animating, setAnimating] = useState(false);
-  // Initialize scores with a tiny bit of bias to avoid 50/50 deadlocks if answered purely neutral, though pathing usually fixes this.
-  // We'll handle 0 scores in calculation.
+  // Initialize scores
   const [scores, setScores] = useState<Record<string, number>>({
     I: 0, E: 0, N: 0, S: 0, T: 0, F: 0, J: 0, P: 0
   });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const currentQuestion: QuestionNode = QUESTION_TREE[currentQuestionId];
+
+  // Scroll to top whenever the question changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentQuestionId]);
 
   const calculateResults = (finalScores: Record<string, number>): ResultData => {
     // Helper to get percentage
@@ -59,9 +63,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
     };
 
     // Determine Main Code
-    // For the first letter (E/I), we strongly prefer the path taken (via scores), 
-    // but if scores are equal we can default to the path start. 
-    // However, our logic ensures Q1 gives points to E or I.
     const l1 = finalScores.E > finalScores.I ? 'E' : 'I';
     const l2 = finalScores.N > finalScores.S ? 'N' : 'S';
     const l3 = finalScores.T > finalScores.F ? 'T' : 'F';
@@ -69,7 +70,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
     const mainCode = `${l1}${l2}${l3}${l4}`;
 
     // Determine Sub Code
-    // Find the dimension with the smallest margin and flip it.
     const margins = [
       { dim: 'I', margin: Math.abs(finalScores.I - finalScores.E), flip: l1 === 'E' ? 'I' : 'E', idx: 0 },
       { dim: 'N', margin: Math.abs(finalScores.N - finalScores.S), flip: l2 === 'N' ? 'S' : 'N', idx: 1 },
@@ -77,11 +77,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
       { dim: 'J', margin: Math.abs(finalScores.J - finalScores.P), flip: l4 === 'J' ? 'P' : 'J', idx: 3 },
     ];
     
-    // Sort by margin (ascending). 
-    // We usually don't flip I/E if the user explicitly chose that path, 
-    // but if the scores are actually super close, we could. 
-    // However, typically N/S, T/F, J/P are the "sub" variations.
-    // Let's just take the absolute smallest margin.
     margins.sort((a, b) => a.margin - b.margin);
     
     const flipTarget = margins[0];
@@ -113,7 +108,6 @@ export const QuizPage: React.FC<QuizPageProps> = ({ onFinish }) => {
         setHistory(prev => [...prev, currentQuestionId]);
         setCurrentQuestionId(option.nextId!);
         setAnimating(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 300);
     } else {
       // Finish Quiz

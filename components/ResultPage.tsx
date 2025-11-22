@@ -12,7 +12,13 @@ interface ResultPageProps {
   onRetake: () => void;
 }
 
-const ContentItem = ({ title, desc, colorClass = "text-slate-800" }: { title: string, desc: string, colorClass?: string }) => (
+interface ContentItemProps {
+  title: string;
+  desc: string;
+  colorClass?: string;
+}
+
+const ContentItem: React.FC<ContentItemProps> = ({ title, desc, colorClass = "text-slate-800" }) => (
   <div className="mb-4 last:mb-0">
     <h4 className={`text-sm font-bold ${colorClass} mb-1`}>{title}</h4>
     <p className="text-sm text-slate-600 leading-relaxed text-justify">{desc}</p>
@@ -305,7 +311,14 @@ export const ResultPage: React.FC<ResultPageProps> = ({ resultData, onRetake }) 
   );
 };
 
-const SectionCard = ({ icon, title, color, children }: { icon: React.ReactNode, title: string, color: string, children: React.ReactNode }) => (
+interface SectionCardProps {
+  icon: React.ReactNode;
+  title: string;
+  color: string;
+  children: React.ReactNode;
+}
+
+const SectionCard: React.FC<SectionCardProps> = ({ icon, title, color, children }) => (
   <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-transform hover:scale-[1.01] duration-300">
     <div className="px-5 py-4 border-b border-slate-50 flex items-center gap-3 bg-gradient-to-r from-slate-50/50 to-white">
       <div className={`w-7 h-7 rounded-lg ${color} flex items-center justify-center shadow-sm text-white`}>
