@@ -1,30 +1,29 @@
-# 🧠 MBTI Personality Test Web App  
-A simple and interactive MBTI personality test built with modern web technologies.  
-Supports dynamic questions, result pages, and mobile-friendly UI.  
-Deployed on **Vercel** and connected to a custom domain.
+## 🛠️ Tech Stack
 
----
+This MBTI test web app is built using modern, production-ready technologies:
 
-## 📌 Features
+### **Frontend Framework**
+- **Next.js** — React-based framework for routing, rendering, and optimal performance  
+- **React (with Hooks)** — Component-based UI architecture  
+- **TypeScript** — Type-safe development for cleaner and more scalable code  
 
-- 16-type MBTI personality assessment  
-- Single-page or multi-page question flow  
-- Clean UI optimized for mobile users  
-- Dynamic scoring algorithm  
-- Shareable result pages  
-- Fast global deployment with Vercel  
-- Easy to extend with additional personality tests
+### **Styling**
+- **Tailwind CSS** (if enabled) — Utility-first CSS framework for fast styling  
+- **Custom CSS Modules** (optional depending on project)
 
----
+### **AI Integration**
+- **Google Gemini API**  
+  Used to generate personalized MBTI descriptions, strengths, blind spots, and other dynamic content.
 
-## 🏗️ Tech Stack
+### **Project Structure**
+- `components/` — Reusable UI components (LandingPage, QuizPage, ResultPage)  
+- `services/` — API service files (Gemini integration)  
+- `constants.ts` — Quiz questions, MBTI dimension mapping  
+- `types.ts` — TypeScript interfaces & types  
+- `index.tsx` — Main entry page  
 
-- **Frontend:** HTML / CSS / JavaScript
-- **Deployment:** Vercel  
-- **Domain:** `ggjj.app`  
-- **Version Control:** GitHub
+### **Deployment**
+- **Vercel** — Automated CI/CD with GitHub integration  
+- Custom domain: `ggjj.app`
 
-If this project uses React / Next.js, replace above line with:
 
-- **Framework:** Next.js  
-- **Styling:** Tailwind CSS (or your actual choice)
