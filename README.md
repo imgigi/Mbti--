@@ -71,4 +71,4 @@ This application is built as a lightweight, high-performance Single Page Applica
 
 ## © Credits
 
-**Design & Concept**: @人类使用说明书 (@UserManualForHumans)
+**Design & Concept**: @人类使用说明书 (@Human Manual)
