@@ -1,29 +1,63 @@
+# 🌲 Forest Psychology Test | 森林心理测试
+
+**“Your truest self will reveal the answer in the forest.”**
+**“你最真实的内心，会在森林里告诉你答案。”**
+
+An immersive, journey-based psychological projection test. Users walk through a visual narrative in a forest, making intuitive choices that reveal their subconscious views on relationships, career, and self-growth.
+
+---
+
 ## 🛠️ Tech Stack
 
-This MBTI test web app is built using modern, production-ready technologies:
+This psychological test web app is built using modern, production-ready technologies:
 
 ### **Frontend Framework**
-- **Next.js** — React-based framework for routing, rendering, and optimal performance  
-- **React (with Hooks)** — Component-based UI architecture  
-- **TypeScript** — Type-safe development for cleaner and more scalable code  
+- **React 18** — Component-based UI architecture
+- **Vite** — Next-generation frontend tooling for ultra-fast development and building
+- **TypeScript** — Type-safe development for cleaner and more scalable code
 
-### **Styling**
-- **Tailwind CSS** (if enabled) — Utility-first CSS framework for fast styling  
-- **Custom CSS Modules** (optional depending on project)
+### **UI & Styling**
+- **Tailwind CSS** — Utility-first CSS framework for rapid UI development
+- **Framer Motion** — Production-ready motion library for React, powering the immersive background transitions, sticker animations, and UI flows
+- **Lucide React** — Lightweight and beautiful icon set
 
-### **AI Integration**
-- **Google Gemini API**  
-  Used to generate personalized MBTI descriptions, strengths, blind spots, and other dynamic content.
+### **Logic & Data**
+- **React Context API** — Global state management for tracking quiz progress, answer history, and bilingual settings
+- **Kokology Principles** — The application logic (`utils/quizLogic.ts`) is based on psychological projection theories to generate immediate, offline analysis without external API dependencies
 
 ### **Project Structure**
-- `components/` — Reusable UI components (LandingPage, QuizPage, ResultPage)  
-- `services/` — API service files (Gemini integration)  
-- `constants.ts` — Quiz questions, MBTI dimension mapping  
-- `types.ts` — TypeScript interfaces & types  
-- `index.tsx` — Main entry page  
+- `components/`
+    - `screens/` — Main views (Start, Question, Result)
+    - `ui/` — Reusable elements (`BackgroundLayer`, `Button`)
+    - `layout/` — Responsive layout wrappers
+- `context/` — State management (`QuizContext`)
+- `utils/` — Analysis algorithms and logic mapping
+- `constants.ts` — Configuration for questions, bilingual text, and CDN assets
+- `types.ts` — TypeScript interfaces
 
 ### **Deployment**
-- **Vercel** — Automated CI/CD with GitHub integration  
-- Custom domain: `ggjj.app`
+- **Vercel / Netlify** — Optimized for static site deployment (Single Page Application)
+- **CDN Assets** — High-performance image delivery for visual assets
 
+---
 
+## 🚀 Getting Started
+
+1.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+
+2.  **Run Development Server**
+    ```bash
+    npm run dev
+    ```
+
+3.  **Build for Production**
+    ```bash
+    npm run build
+    ```
+
+## © Credits
+
+**Design & Concept**: @人类使用说明书 (@UserManualForHumans)
